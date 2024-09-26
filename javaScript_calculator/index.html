@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="app, landing, corporate, Creative, Html Template, Template">
+    <meta name="author" content="web-themes">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- title -->
+    <title>JavaScript Calculator</title>
+
+    <!-- favicon -->
+    <!-- <link href="img/favicon.png" type="image/png" rel="icon"> -->
+
+    <!-- all css here -->
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    
+    <div class="calculator_wrapper">
+        <div class="head_wrap">
+            <h1>JavaScript Calculator</h1>
+        </div>
+        <div id="calculator" class="calculator">
+            <div class="custom_flex">
+                <button id="clear" class="clear">C</button>
+                <button id="viewer" class="viewer">0</button>
+            </div>
+            <div>
+                <div class="custom_flex">
+                    <button class="num" data-num="7">7</button>
+                    <button class="num" data-num="8">8</button>
+                    <button class="num" data-num="9">9</button>
+                    <button class="ops" data-ops="plus">+</button>
+                </div>
+                <div class="custom_flex">
+                    <button class="num" data-num="4">4</button>
+                    <button class="num" data-num="5">5</button>
+                    <button class="num" data-num="6">6</button>
+                    <button class="ops" data-ops="minus">-</button>
+                </div>
+                <div class="custom_flex">
+                    <button class="num" data-num="1">1</button>
+                    <button class="num" data-num="2">2</button>
+                    <button class="num" data-num="3">3</button>
+                    <button class="ops" data-ops="times">*</button>
+                </div>
+                <div class="custom_flex">
+                    <button class="num" data-num="0">0</button>
+                    <button class="num" data-num=".">.</button>
+                    <button id="equals" class="equals" data-result="">=</button>
+                    <button class="ops" data-ops="divided by">/</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        
+
+        (function() {
+            "use strict";
+
+            var el = function(element) {
+                if (element.charAt(0) === "#") {
+                    return document.querySelector(element);
+                }
+                return document.querySelectorAll(element);
+            }
+
+
+            var viewer = el("#viewer"),
+
+            equals = el("#equals"),
+            nums = el(".num"),
+            ops = el(".ops"),
+            theNum = "",
+            oldNum = "",
+            resultNum,
+            operator;
+
+
+            var setNum = function() {
+                if (resultNum) {
+                    theNum = this.getAttribute("data-num");
+                    resultNum = "";
+                }
+                else {
+                    theNum += this.getAttribute("data-num");
+                }
+
+                viewer.innerHTML = theNum;
+            };
+
+
+
+            var moveNum = function() {
+                oldNum = theNum;
+                theNum = "";
+                operator = this.getAttribute("data-ops");
+
+                equals.setAttribute("data-result", "");
+            };
+
+
+
+            var displayNum = function() {
+
+
+                oldNum = parseFloat(oldNum);
+                theNum = parseFloat(theNum);
+
+
+
+                switch (operator) {
+
+                    case "plus":
+                        resultNum = oldNum + theNum;
+                        break;
+
+                    case "minus":
+                        resultNum = oldNum - theNum;
+                        break;
+
+
+                    case "times":
+                        resultNum = oldNum * theNum;
+                        break;
+
+
+                    case "divided by":
+                        resultNum = oldNum / theNum;
+                        break;
+
+
+                    default:
+                        resultNum = theNum;
+
+                }
+
+
+
+                if (!isFinite(resultNum)) {
+                    if (isNaN(resultNum)) {
+                        resultNum = "You broke it!";
+                    }
+                    else {
+                        resultNum = "look at what you ve done";
+                        el('#calculator').classList.add("broken");
+
+                        el('#reset').classList.add("show");
+                    }
+                }
+
+
+                viewer.innerHTML = resultNum;
+                equals.setAttribute("data-result", resultNum);
+
+                oldNum = "0";
+                theNum = resultNum;
+
+            };
+
+
+            var clearAll = function() {
+                oldNum = "";
+                theNum = "";
+                viewer.innerHTML = "0";
+                equals.setAttribute("data-result", resultNum);
+            };
+
+
+            for (var i = 0, l = nums.length; i < l; i++) {
+                nums[i].onclick = setNum;
+            }
+
+            for (var i = 0, l = ops.length; i < l; i++) {
+                ops[i].onclick = moveNum;
+            }
+
+            equals.onclick = displayNum;
+
+            el("#clear").onclick = clearAll;
+
+            
+        }());
+
+
+
+    </script>
+   
+</body>
+</html>
